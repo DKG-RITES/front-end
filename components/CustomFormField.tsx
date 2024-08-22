@@ -37,7 +37,8 @@ interface CustomProps {
     dateFormat?: string,
     showTimeSelect?: boolean,
     children?: React.ReactNode,
-    renderSkeleton?: (field: any) => React.ReactNode 
+    renderSkeleton?: (field: any) => React.ReactNode
+    onChange?: (id: number, value: string) => void;
 }
 
 const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {

@@ -92,9 +92,8 @@ const VisualInspectionForm = () => {
 
     const [data, setData] = useState<UserData[]>([]);
 
-    const [formRows, setFormRows] = useState<FormRow[]>([
-        { id: 1, select1: '130m', textInput: 'No. 2', select2: 'A' }
-      ]);
+    const [acceptanceData, setAcceptanceData] = useState([{ id: 1, value: '' }]);
+    const [defectiveData, setDefectiveData] = useState([{ id: 1, value: '' }]);
 
     useEffect(() => {
         fetch('/sampleData.json')
@@ -103,15 +102,33 @@ const VisualInspectionForm = () => {
           .catch((error) => console.error('Error fetching data:', error));
       }, []);
 
-    //   const addFormRow = () => {
-    //     const newRow: FormRow = {
-    //       id: formRows.length + 1,
-    //       select1: '130m',
-    //       textInput: `No. ${formRows.length + 2}`,
-    //       select2: 'A',
-    //     };
-    //     setFormRows([...formRows, newRow]);
-    //   };
+    const addMoreAcceptanceData = () => {
+        setAcceptanceData([
+            ...acceptanceData,
+            {id: acceptanceData.length + 1, value: ''},
+        ]);
+    }
+
+    const addMoreDefectiveData = () => {
+        setDefectiveData([
+            ...defectiveData,
+            {id: defectiveData.length + 1, value: ''},
+        ]);
+    }
+
+    const handleInputChange = (id: number, value: string) => {
+        const updatedData = acceptanceData.map(data => 
+          data.id === id ? { ...data, value } : data
+        );
+        setAcceptanceData(updatedData);
+      };
+
+    const handleInputChangeDef = (id: number, value: string) => {
+    const updatedData = defectiveData.map(data => 
+        data.id === id ? { ...data, value } : data
+    );
+    setAcceptanceData(updatedData);
+    };
       
   return (
     <div className='flex h-screen max-h-screen'>
@@ -289,57 +306,63 @@ const VisualInspectionForm = () => {
                                 <div className='flex flex-col'>
                                     <h6 className='font-semibold underline mb-4'>Add Acceptance Data</h6>
 
-                                    <div className='flex items-center justify-between flex-wrap'>
-                                        <div className='mt-2'>
-                                            <CustomFormField 
-                                                fieldType={FormFieldType.SELECT}
-                                                control={form.control}
-                                                name='railAcceptanceLength'
-                                                placeholder='Select rail length'
-                                            >
-                                                {railLengths.map(( railLength ) => (
-                                                    <SelectItem key={railLength.number} value={railLength.number}>
-                                                        <div className="flex cursor-pointer items-start gap-2">
-                                                            <p>{railLength.number}</p>
-                                                        </div>
-                                                    </SelectItem>
-                                                ))}
-                                            </CustomFormField>
-                                        </div>
+                                    {acceptanceData.map(data => (
+                                        <div key={data.id} className='flex items-center justify-between flex-wrap'>
+                                            <div className='mt-2'>
+                                                <CustomFormField 
+                                                    fieldType={FormFieldType.SELECT}
+                                                    control={form.control}
+                                                    name='railAcceptanceLength'
+                                                    placeholder='Select rail length'
+                                                >
+                                                    {railLengths.map(( railLength ) => (
+                                                        <SelectItem key={railLength.number} value={railLength.number}>
+                                                            <div className="flex cursor-pointer items-start gap-2">
+                                                                <p>{railLength.number}</p>
+                                                            </div>
+                                                        </SelectItem>
+                                                    ))}
+                                                </CustomFormField>
+                                            </div>
 
-                                        <div className='flex mt-2'>
-                                            <CustomFormField 
-                                                fieldType={FormFieldType.INPUT}
-                                                control={form.control}
-                                                name='number'
-                                                placeholder='Category'
-                                            />
+                                            <div className='flex mt-2'>
+                                                <CustomFormField 
+                                                    fieldType={FormFieldType.INPUT}
+                                                    control={form.control}
+                                                    name='number'
+                                                    placeholder='Category'
+                                                    onChange={(event) => handleInputChange(data.id, event.target.value)} 
+                                                />
 
-                                            <AlertDialogDemo id='2'/>
-                                        </div>
+                                                <AlertDialogDemo id='2'/>
+                                            </div>
+                                            
+                                            <div className='sm:mt-2 mt-2'>
+                                                <CustomFormField 
+                                                    fieldType={FormFieldType.SELECT}
+                                                    control={form.control}
+                                                    name='railClass'
+                                                    placeholder='Select rail class'
+                                                >
+                                                    {railClasses.map(( railClass ) => (
+                                                        <SelectItem key={railClass.number} value={railClass.number}>
+                                                            <div className="flex cursor-pointer items-start gap-2">
+                                                                <p>{railClass.number}</p>
+                                                            </div>
+                                                        </SelectItem>
+                                                    ))}
+                                                </CustomFormField>
+                                            </div>
 
-                                        <div className='sm:mt-2 mt-2'>
-                                            <CustomFormField 
-                                                fieldType={FormFieldType.SELECT}
-                                                control={form.control}
-                                                name='railClass'
-                                                placeholder='Select rail class'
-                                            >
-                                                {railClasses.map(( railClass ) => (
-                                                    <SelectItem key={railClass.number} value={railClass.number}>
-                                                        <div className="flex cursor-pointer items-start gap-2">
-                                                            <p>{railClass.number}</p>
-                                                        </div>
-                                                    </SelectItem>
-                                                ))}
-                                            </CustomFormField>
                                         </div>
-                                    </div>
+                                    ))}
                                     
-                                    <div className='flex ml-2 mt-6'>
-                                        <p className='text-blue-500 cursor-pointer'>&#8853;</p>
-                                        <p className='ml-3 font-medium'>Add More Acceptance Data</p>
-                                    </div>
+                                    <button onClick={addMoreAcceptanceData}>
+                                        <div className='flex ml-2 mt-6'>
+                                            <p className='text-blue-500 cursor-pointer'>&#8853;</p>
+                                            <p className='ml-3 font-medium'>Add More Acceptance Data</p>
+                                        </div>
+                                    </button>
                                 </div>
 
                                 <hr />
@@ -347,74 +370,80 @@ const VisualInspectionForm = () => {
                                 <div className='flex flex-col'>
                                     <h6 className='font-semibold underline mb-4'>Add Defect Data</h6>
 
-                                    <div className='flex items-center justify-between flex-wrap'>
-                                        <div className='mt-2'>
-                                            <CustomFormField 
-                                                fieldType={FormFieldType.SELECT}
-                                                control={form.control}
-                                                name='defect'
-                                                placeholder='Defect'
-                                            >
-                                                {defects.map(( defect ) => (
-                                                    <SelectItem key={defect.name} value={defect.name}>
-                                                        <div className="flex cursor-pointer items-start gap-2">
-                                                            <p>{defect.name}</p>
-                                                        </div>
-                                                    </SelectItem>
-                                                ))}
-                                            </CustomFormField>
+                                    {defectiveData.map(data => (
+                                        <div key={data.id} className='flex items-center justify-between flex-wrap'>
+                                            <div className='mt-2'>
+                                                <CustomFormField 
+                                                    fieldType={FormFieldType.SELECT}
+                                                    control={form.control}
+                                                    name='defect'
+                                                    placeholder='Defect'
+                                                >
+                                                    {defects.map(( defect ) => (
+                                                        <SelectItem key={defect.name} value={defect.name}>
+                                                            <div className="flex cursor-pointer items-start gap-2">
+                                                                <p>{defect.name}</p>
+                                                            </div>
+                                                        </SelectItem>
+                                                    ))}
+                                                </CustomFormField>
+                                            </div>
+
+                                            <div className='mt-2'>
+                                                <CustomFormField 
+                                                    fieldType={FormFieldType.SELECT}
+                                                    control={form.control}
+                                                    name='type'
+                                                    placeholder='Type'
+                                                >
+                                                    {defectTypes.map(( defectType ) => (
+                                                        <SelectItem key={defectType.name} value={defectType.name}>
+                                                            <div className="flex cursor-pointer items-start gap-2">
+                                                                <p>{defectType.name}</p>
+                                                            </div>
+                                                        </SelectItem>
+                                                    ))}
+                                                </CustomFormField>
+                                            </div>
+
+                                            <div className='flex mt-2'>
+                                                <CustomFormField 
+                                                    fieldType={FormFieldType.INPUT}
+                                                    control={form.control}
+                                                    name='location'
+                                                    placeholder='Location'
+                                                    onChange={(event) => handleInputChangeDef(data.id, event.target.value)}
+                                                />
+
+                                                <AlertDialogDemo id='1'/>
+                                            </div>
+
+                                            <div className='sm:mt-2 mt-2'>
+                                                <CustomFormField 
+                                                    fieldType={FormFieldType.SELECT}
+                                                    control={form.control}
+                                                    name='position'
+                                                    placeholder='Pos.'
+                                                >
+                                                    {positions.map(( position ) => (
+                                                        <SelectItem key={position.name} value={position.name}>
+                                                            <div className="flex cursor-pointer items-start gap-2">
+                                                                <p>{position.name}</p>
+                                                            </div>
+                                                        </SelectItem>
+                                                    ))}
+                                                </CustomFormField>
+                                            </div>
                                         </div>
+                                    ))}
 
-                                        <div className='mt-2'>
-                                            <CustomFormField 
-                                                fieldType={FormFieldType.SELECT}
-                                                control={form.control}
-                                                name='type'
-                                                placeholder='Type'
-                                            >
-                                                {defectTypes.map(( defectType ) => (
-                                                    <SelectItem key={defectType.name} value={defectType.name}>
-                                                        <div className="flex cursor-pointer items-start gap-2">
-                                                            <p>{defectType.name}</p>
-                                                        </div>
-                                                    </SelectItem>
-                                                ))}
-                                            </CustomFormField>
+                                    <button onClick={addMoreDefectiveData}>
+                                        <div className='flex ml-2 mt-6'>
+                                            <p className='text-blue-500 cursor-pointer'>&#8853;</p>
+                                            <p className='ml-3 font-medium'>Add More Defect Data</p>
                                         </div>
-
-                                        <div className='flex mt-2'>
-                                            <CustomFormField 
-                                                fieldType={FormFieldType.INPUT}
-                                                control={form.control}
-                                                name='location'
-                                                placeholder='Location'
-                                            />
-
-                                            <AlertDialogDemo id='1'/>
-                                        </div>
-
-                                        <div className='sm:mt-2 mt-2'>
-                                            <CustomFormField 
-                                                fieldType={FormFieldType.SELECT}
-                                                control={form.control}
-                                                name='position'
-                                                placeholder='Pos.'
-                                            >
-                                                {positions.map(( position ) => (
-                                                    <SelectItem key={position.name} value={position.name}>
-                                                        <div className="flex cursor-pointer items-start gap-2">
-                                                            <p>{position.name}</p>
-                                                        </div>
-                                                    </SelectItem>
-                                                ))}
-                                            </CustomFormField>
-                                        </div>
-                                    </div>
-
-                                    <div className='flex ml-2 mt-6'>
-                                        <p className='text-blue-500 cursor-pointer'>&#8853;</p>
-                                        <p className='ml-3 font-medium'>Add More Defect Data</p>
-                                    </div>
+                                    </button>
+                                    
                                 </div>
 
                                 <hr />
