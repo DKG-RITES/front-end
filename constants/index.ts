@@ -211,3 +211,39 @@ export const shiftSummaries = [
         name: 'Inspected Railwise Summary'
     },
 ]
+
+export const SMS = [
+    {
+        name: 'SMS2'
+    },
+    {
+        name: 'SMS3'
+    }
+]
+
+export const railGradesSMS = [
+    {
+        name: 'R260'
+    },
+    {
+        name: 'R350 HT'
+    },
+    {
+        name: '1080 HH'
+    },
+    {
+        name: '880'
+    },
+    {
+        name: '880 NC'
+    },
+]
+
+export const bloomIdentifications = [
+    {
+        name: 'Satisfactory'
+    },
+    {
+        name: 'Non Satisfactory'
+    }
+]

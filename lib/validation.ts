@@ -45,3 +45,24 @@ export const VisualInspectionFormValidation = z.object({
   location: z.string().min(0.01, "Location must be greater than or equal to 0.01"),
   position: z.string().min(1, "Select at least one position"),
 })
+
+export const SMSStartDutyFormValidation = z.object({
+  date: z.coerce.date(),
+  shift: z.string().min(1, "Select at least one shift"),
+  SMS: z.string().min(1, "Select at least one SMS"),
+  railGrade: z.string().min(1, "Select at least one railGrade"),
+})
+
+export const SMSBloomInspectionFormValidation = z.object({
+  castNumber: z.string().min(1, "Cast number must be greater than or equal to 1"),
+  primeBlooms: z.string().min(1, "No. of prime blooms must be greater than or equal to 1"),
+  COBlooms: z.string().min(1, "No. of CO blooms must be greater than or equal to 1"),
+  bloomIdentification: z.string().min(1, "Select at least one Bloom Identification"),
+  bloomsLength: z.string().min(0.01, "Please enter bloom length greater than 0"),
+  bloomsSurfaceCondition: z.string().min(1, 'Enter surface condition of Blooms'),
+  primeBloomsRejected: z.string().min(0, "No. of rejected prime blooms must be greater than or equal to 0"),
+  COBloomsRejected: z.string().min(0, "No. of rejected CO blooms must be greater than or equal to 0"),
+  remark: z
+  .string()
+  .min(1, "Give the remarks correctly")
+})
